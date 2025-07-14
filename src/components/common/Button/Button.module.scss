@@ -1,0 +1,181 @@
+@use '@/styles/variables.scss' as *;
+
+.button__content {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: ease-in-out 0.2s;
+    gap: 6px;
+
+    span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+.button__content__text {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    transition: ease-in-out 0.2s;
+    display: flex;
+    gap: 8px;
+
+    span {
+        font-size: 16px;
+        font-weight: 500;
+        text-align: center;
+        color: $text-primary;
+        line-height: 1.5px;
+        transition: ease-in-out 0.2s;
+
+        svg {
+            width: 20px;
+            height: 20px;
+            fill: $text-primary;
+            transition: ease-in-out 0.2s;
+        }
+    }
+
+    &:hover {
+        background-color: $brand-primary-5;
+
+        span {
+            color: darken($text-primary, 10%);
+            fill: darken($text-primary, 10%);
+        }
+    }
+
+    &.dark {
+        span {
+            color: $text-light;
+        }
+        &:hover {
+            background-color: $brand-primary-5;
+            span {
+                color: $text-secondary;
+            }
+        }
+    }
+}
+
+.button__content__outlined {
+    cursor: pointer;
+    background-color: transparent;
+    border: 2px solid $foreground-primary;
+    padding: 12px 48px;
+    border-radius: 32px;
+
+    span {
+        font-size: 16px;
+        font-weight: 500;
+        text-align: center;
+        color: $text-primary;
+    }
+
+    &:hover {
+        background-color: darken($foreground-primary, 10%);
+        border: 2px solid darken($foreground-primary, 10%);
+
+        span {
+            color: $text-light;
+        }
+    }
+
+    &.dark {
+        border: 2px solid $background-primary;
+
+        span {
+            color: $text-light;
+        }
+
+        &:hover {
+            background-color: $background-secondary;
+            border: 2px solid $background-secondary;
+            span {
+                color: $text-primary;
+            }
+        }
+    }
+}
+
+.button__content__contained {
+    cursor: pointer;
+    background-color: $foreground-secondary;
+    padding: 16px 48px;
+    border-radius: 12px;
+
+    span {
+        font-size: 18px;
+        font-weight: 500;
+        text-align: center;
+        color: $text-primary;
+    }
+
+    &:hover {
+        background-color: darken($foreground-secondary, 10%);
+    }
+
+    &.dark {
+        background-color: $background-secondary;
+
+        span {
+            color: $foreground-secondary;
+        }
+
+        &:hover {
+            background-color: darken($foreground-primary, 10%);
+            span {
+                color: $foreground-secondary;
+            }
+        }
+    }
+}
+
+.button__content__onlyIcon {
+    padding: 4px;
+    border-radius: 8px;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: ease-in-out 0.2s;
+
+    span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: ease-in-out 0.2s;
+    }
+}
+
+@media screen and (max-width: 1040px) {
+    .button__content__text {
+        span {
+            font-size: 14px;
+        }
+    }
+
+    .button__content__outlined {
+        padding: 10px 42px;
+        span {
+            font-size: 14px;
+        }
+    }
+
+    .button__content__contained {
+        padding: 10px 42px;
+        span {
+            font-size: 14px;
+        }
+    }
+    
+}

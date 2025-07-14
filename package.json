@@ -14,25 +14,41 @@
     "@fontsource/roboto": "^5.2.6",
     "@mui/icons-material": "^7.2.0",
     "@mui/material": "^7.2.0",
+    "@tailwindcss/postcss": "^4.1.11",
     "axios": "^1.10.0",
-    "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
+    "sass": "^1.89.2",
     "sweetalert2": "^11.22.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.19.7",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
-    "tailwindcss": "^4",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
     "typescript": "^5"
-  }
+  },
+  "description": "Este é o repositório **frontend** do projeto **ContaQuiz**, desenvolvido pela empresa júnior **TechtinsJR**.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechtinsJr/contaquiz-frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/TechtinsJr/contaquiz-frontend/issues"
+  },
+  "homepage": "https://github.com/TechtinsJr/contaquiz-frontend#readme"
 }

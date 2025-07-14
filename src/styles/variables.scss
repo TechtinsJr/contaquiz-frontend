@@ -1,0 +1,129 @@
+//GRAYSCALE
+$dark-100: #242424;
+$dark-90: #242424c4;
+$dark-80: #24242480;
+$dark-20: #24242420;
+
+$gray-100: #a2a1a8;
+$gray-80: #a2a1a880;
+$gray-20: #a2a1a820;
+$gray-10: #a2a1a810;
+$gray-5: #a2a1a805;
+
+$white-100: #f9f9f9;
+$white-80: #f9f9f980;
+$white-20: #f9f9f920;
+
+$light-100: #f2f2f7;
+$light-80: #f2f2f780;
+$light-20: #f2f2f720;
+$light-10: #f2f2f710;
+$light-5: #f2f2f705;
+
+//UTILS - COLORS
+$brand-blue: #5468FF;
+$dark-navy: #202333;
+$slate-gray: #444655;
+$medium-gray: #6A6C80;
+$periwinkle-blue: #6A76D5;
+$muted-purple: #7177AA;
+
+$yellow-100: #efbe12;
+$yellow-5: #efbe1205;
+
+$blue-100: #3D5CFF;
+$blue-5: #3D5CFF05;
+
+$green-100: #22c55e;
+$green-5: #22c55e05;
+
+$red-100: #f45b69;
+$red-80: #f45b6980;
+$red-5: #f45b6905;
+
+//TOKENS - BACKGROUNDS
+$background-primary: $white-100;
+$background-secondary: $light-100;
+
+//TOKENS - FOREGROUNDS
+$foreground-primary: $slate-gray;
+$foreground-secondary: $muted-purple;
+$foreground-tertiary: $periwinkle-blue;
+
+///TOKENS - BRAND COLORS
+$brand-primary: $brand-blue;
+$brand-primary-5: #5468FF0d;
+$brand-secondary: $periwinkle-blue;
+$brand-dark: $dark-navy;
+
+//TOKENS - TEXT COLORS
+$text-title: $brand-dark;
+
+$text-primary: $brand-dark;
+$text-secondary: $gray-100;
+$text-on-brand: $white-100;
+$text-light: $white-100;
+$text-dark: $dark-100;
+$text-gray: $gray-100;
+
+// -----------------------------------------------------------------
+// OUTROS TOKENS (SEM MUDANÇAS)
+// -----------------------------------------------------------------
+
+//TOKENS - TEXT WEIGHT
+$font-medium: 500;
+$font-bold: 700;
+$font-light: 300;
+
+//TOKENS - TEXT SIZES
+$font-size-xxs: 0.5rem;
+$font-size-xs: 0.75rem;
+$font-size-sm: 0.875rem;
+$font-size-md: 16px;
+$font-size-lg: 1.125rem;
+$font-size-xl: 1.25rem;
+$font-size-2xl: 1.5rem;
+$font-size-3xl: 1.875rem;
+$font-size-4xl: 2.25rem;
+$font-size-5xl: 3rem;
+
+//TOKENS - LINECOLORS
+$line-color-05: #0000000d;
+$line-color-10: #0000001a;
+$line-color-30: #0000004d;
+$line-color-50: #00000080;
+$line-color-70: #000000b3;
+$line-color-90: #000000e6;
+$line-color-100: #000000ff;
+
+:export {
+    backgroundPrimary: $background-primary;
+    backgroundSecondary: $background-secondary;
+
+    foregroundPrimary: $foreground-primary;
+    foregroundSecondary: $foreground-secondary;
+
+    brandPrimary: $brand-primary;
+    brandSecondary: $brand-secondary;
+
+    textTitle: $text-title;
+    textPrimary: $text-primary;
+    textSecondary: $text-secondary;
+    textLight: $text-light;
+    textDark: $text-dark;
+    textGray: $text-gray;
+
+    fontMedium: $font-medium;
+    fontBold: $font-bold;
+    fontLight: $font-light;
+
+    fontSizeXXS: $font-size-xxs;
+    fontSizeXS: $font-size-xs;
+    fontSizeSM: $font-size-sm;
+    fontSizeMD: $font-size-md;
+    fontSizeLG: $font-size-lg;
+    fontSizeXL: $font-size-xl;
+    fontSize2XL: $font-size-2xl;
+    fontSize3XL: $font-size-3xl;
+    fontSize4XL: $font-size-4xl;
+}

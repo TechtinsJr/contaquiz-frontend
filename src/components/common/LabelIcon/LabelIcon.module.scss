@@ -1,0 +1,34 @@
+@use '../../../styles/variables.scss' as *;
+
+.labelIcon__content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    background: transparent;
+    background-color: transparent;
+
+    &>* {
+        background-color: transparent;
+    }
+
+    .labelIcon__content__label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 15px;
+        line-height: 1.5px;
+    }
+
+    .labelIcon__content__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+}

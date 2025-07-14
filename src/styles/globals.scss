@@ -1,0 +1,54 @@
+@use './variables.scss' as *;
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  scrollbar-width: thin;
+  scrollbar-color: $foreground-primary transparent;
+  font-family: "Roboto", sans-serif;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #FFFFFF;
+  border-radius: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: $yellow-100;
+}
+
+
+html,
+body {
+  max-width: 100vw;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  background-color: $background-primary;
+}
+
+
+body {
+  background-color: $background-primary;
+  color: $text-dark;
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.loading-active {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

@@ -1,0 +1,11 @@
+@use '@/styles/variables.scss' as *;
+
+.main__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    max-width: 100vw;
+    background-color: $background-primary;
+}

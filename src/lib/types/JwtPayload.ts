@@ -1,6 +1,6 @@
 export type JwtPayload = {
     exp: number;
-    role?: string;
+    role?: 'admin' | 'student';
     userId?: string;
     email?: string;
     [key: string]: unknown;
