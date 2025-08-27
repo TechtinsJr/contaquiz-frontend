@@ -1,11 +1,11 @@
 "use client"
 import 'dotenv/config';
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/atoms/button"
-import { Input } from "@/components/ui/atoms/input"
-import { Label } from "@/components/ui/atoms/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/atoms/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/atoms/table"
+import { Button } from "../../../components/ui/atoms/button"
+import { Input } from "../../../components/ui/atoms/input"
+import { Label } from "../../../components/ui/atoms/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/atoms/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/atoms/table"
 import {
     Dialog,
     DialogContent,
@@ -13,14 +13,14 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/atoms/dialog"
-import { Badge } from "@/components/ui/atoms/badge"
-import { Textarea } from "@/components/ui/atoms/textarea"
-import { Switch } from "@/components/ui/atoms/switch"
+} from "../../../components/ui/atoms/dialog"
+import { Badge } from "../../../components/ui/atoms/badge"
+import { Textarea } from "../../../components/ui/atoms/textarea"
+import { Switch } from "../../../components/ui/atoms/switch"
 import { Trash2, Edit, Plus, Search } from "lucide-react"
-import { useToast } from "@/hooks/useToast"
-import { Discipline, DisciplineFormData } from "@/interface/IDisciplina"
-import { Hint } from '@/components/ui/atoms/tooltip';
+import { useToast } from "../../../hooks/useToast"
+import { Discipline, DisciplineFormData } from "../../../interface/IDisciplina"
+import { Hint } from '../../../components/ui/atoms/tooltip';
 
 export default function DisciplinasPage() {
     const [disciplines, setDisciplines] = useState<Discipline[]>([])
