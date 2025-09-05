@@ -1,173 +1,62 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
+
 import 'dotenv/config';
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "../../../components/ui/atoms/button"
 import { Input } from "../../../components/ui/atoms/input"
-import { Label } from "../../../components/ui/atoms/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/atoms/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/atoms/table"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "../../../components/ui/atoms/dialog"
 import { Badge } from "../../../components/ui/atoms/badge"
-import { Textarea } from "../../../components/ui/atoms/textarea"
-import { Switch } from "../../../components/ui/atoms/switch"
 import { Trash2, Edit, Plus, Search } from "lucide-react"
 import { useToast } from "../../../hooks/useToast"
-import { Discipline, DisciplineFormData } from "../../../interface/IDisciplina"
+import { Discipline, DisciplineFormData } from "../../../lib/interface/IDisciplina"
 import { Hint } from '../../../components/ui/atoms/tooltip';
+import { useDisciplines } from '@/hooks/api/useDisciplines';
+import { DisciplineDialog } from './_ui/disciplineDialog';
+import { DisciplineAlertDialog } from './_ui/disciplineAlertDialog';
+import { setDialog } from '@/lib/utils';
 
 export default function DisciplinasPage() {
-    const [disciplines, setDisciplines] = useState<Discipline[]>([])
-    const [loading, setLoading] = useState(true)
     const [searchQuery, setSearchQuery] = useState("")
-    const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
-    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-    const [editingDiscipline, setEditingDiscipline] = useState<Discipline | null>(null)
-    const [formData, setFormData] = useState<DisciplineFormData>({
-        name: "",
-        description: "",
-        active: true,
-    })
+
+    const [dialogState, setDialogState] = useState<{ isOpenCreateOrEditDialog: boolean; isOpenDeleteDialog: boolean; data?: Discipline | null }>({
+        isOpenCreateOrEditDialog: false,
+        isOpenDeleteDialog: false,
+        data: null,
+    });
+
     const { toast } = useToast()
-    const apiUrl = process.env.API_URL || 'http://localhost:5000'
+    const { useListDisciplines, useCreateDiscipline, useUpdateDiscipline, useDeleteDiscipline } = useDisciplines();
 
-    // disciplines
-    const fetchDisciplines = async () => {
-        try {
-            setLoading(true)
-            const params = new URLSearchParams()
-            if (searchQuery) params.append("q", searchQuery)
+    const { data: dataDisciplines, isError, isLoading } = useListDisciplines({ page: 1, limit: 10, filter: searchQuery });
+    const { mutate: createDiscipline } = useCreateDiscipline();
+    const { mutate: updateDiscipline } = useUpdateDiscipline();
+    const { mutate: deleteDiscipline } = useDeleteDiscipline();
 
-            const response = await fetch(`${apiUrl}/api/disciplinas?${params}`)
-            if (!response.ok) throw new Error("Erro ao carregar disciplinas")
-
-            const data = await response.json()
-            setDisciplines(data.items || [])
-        } catch (error) {
-            toast({
-                title: "Erro",
-                description: "Não foi possível carregar as disciplinas",
-                variant: "destructive",
-            })
-        } finally {
-            setLoading(false)
+    const handleSaveDiscipline = (data: DisciplineFormData) => {
+        if (dialogState.data?._id) {
+            updateDiscipline({ id: dialogState.data._id, payload: data });
+            toast({ title: "Disciplina atualizada!", description: `A disciplina "${data.name}" foi atualizada.` });
         }
-    }
-
-    // Create discipline
-    const createDiscipline = async () => {
-        try {
-            const response = await fetch(`${apiUrl}/api/disciplinas`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            })
-
-            if (!response.ok) {
-                const error = await response.json()
-                throw new Error(error.message || "Erro ao criar disciplina")
-            }
-
-            toast({
-                title: "Sucesso",
-                description: "Disciplina criada com sucesso",
-            })
-
-            setIsCreateDialogOpen(false)
-            resetForm()
-            fetchDisciplines()
-        } catch (error: any) {
-            toast({
-                title: "Erro",
-                description: error.message,
-                variant: "destructive",
-            })
+        else {
+            createDiscipline(data);
+            toast({ title: "Disciplina criada!", description: `A disciplina "${data.name}" foi criada.` });
         }
+        closeDialog();
+    };
+
+    const handleDeleteDiscipline = () => {
+        if (!dialogState.data?._id) return;
+        deleteDiscipline(dialogState.data._id);
+        toast({ title: "Disciplina excluída!", description: `A disciplina foi removida.` });
+        closeDialog();
     }
 
-    // Update discipline
-    const updateDiscipline = async () => {
-        if (!editingDiscipline) return
-
-        try {
-            const response = await fetch(`${apiUrl}/api/disciplinas/${editingDiscipline._id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-            })
-
-            if (!response.ok) {
-                const error = await response.json()
-                throw new Error(error.message || "Erro ao atualizar disciplina")
-            }
-
-            toast({
-                title: "Sucesso",
-                description: "Disciplina atualizada com sucesso",
-            })
-
-            setIsEditDialogOpen(false)
-            setEditingDiscipline(null)
-            resetForm()
-            fetchDisciplines()
-        } catch (error: any) {
-            toast({
-                title: "Erro",
-                description: error.message,
-                variant: "destructive",
-            })
-        }
-    }
-
-    // Delete discipline
-    const deleteDiscipline = async (id: string) => {
-        if (!confirm("Tem certeza que deseja excluir esta disciplina?")) return
-
-        try {
-            const response = await fetch(`${apiUrl}/api/disciplinas/${id}`, {
-                method: "DELETE",
-            })
-
-            if (!response.ok) throw new Error("Erro ao excluir disciplina")
-
-            toast({
-                title: "Sucesso",
-                description: "Disciplina excluída com sucesso",
-            })
-
-            fetchDisciplines()
-        } catch (error) {
-            toast({
-                title: "Erro",
-                description: "Não foi possível excluir a disciplina",
-                variant: "destructive",
-            })
-        }
-    }
-
-    const resetForm = () => {
-        setFormData({ name: "", description: "", active: true })
-    }
-
-    const openEditDialog = (discipline: Discipline) => {
-        setEditingDiscipline(discipline)
-        setFormData({
-            name: discipline.name,
-            description: discipline.description || "",
-            active: discipline.active,
-        })
-        setIsEditDialogOpen(true)
-    }
-
-    useEffect(() => {
-        fetchDisciplines()
-    }, [searchQuery])
+    const openCreateDialog = () => setDialogState(setDialog("createOrEdit", null));
+    const openEditDialog = (discipline: Discipline) => setDialogState(setDialog("createOrEdit", discipline));
+    const openDeleteDialog = (discipline: Discipline) => setDialogState(setDialog("delete", discipline));
+    const closeDialog = () => setDialogState(setDialog("none", null));
 
     return (
         <div className="container mx-auto py-8 px-4">
@@ -188,56 +77,10 @@ export default function DisciplinasPage() {
                                 className="pl-10"
                             />
                         </div>
-                        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button className={'cursor-pointer'} onClick={resetForm}>
-                                    <Plus className="h-4 w-4 mr-2" />
-                                    Nova Disciplina
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Criar Nova Disciplina</DialogTitle>
-                                    <DialogDescription>Preencha os dados da nova disciplina</DialogDescription>
-                                </DialogHeader>
-                                <div className="space-y-4">
-                                    <div>
-                                        <Label htmlFor="name">Nome *</Label>
-                                        <Input
-                                            id="name"
-                                            value={formData.name}
-                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                            placeholder="Nome da disciplina"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="description">Descrição</Label>
-                                        <Textarea
-                                            id="description"
-                                            value={formData.description}
-                                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                            placeholder="Descrição da disciplina (opcional)"
-                                        />
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <Switch
-                                            id="active"
-                                            checked={formData.active}
-                                            onCheckedChange={(checked) => setFormData({ ...formData, active: checked })}
-                                        />
-                                        <Label htmlFor="active">Disciplina ativa</Label>
-                                    </div>
-                                    <div className="flex gap-2 pt-4">
-                                        <Button onClick={createDiscipline} className="flex-1">
-                                            Criar Disciplina
-                                        </Button>
-                                        <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)} className="flex-1">
-                                            Cancelar
-                                        </Button>
-                                    </div>
-                                </div>
-                            </DialogContent>
-                        </Dialog>
+                        <Button className={'cursor-pointer'} onClick={openCreateDialog}>
+                            <Plus className="h-4 w-4 mr-2" />
+                            Nova Disciplina
+                        </Button>
                     </div>
 
                     {/* Table */}
@@ -253,20 +96,20 @@ export default function DisciplinasPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {loading ? (
+                                {isLoading ? (
                                     <TableRow>
                                         <TableCell colSpan={5} className="text-center py-8">
                                             Carregando disciplinas...
                                         </TableCell>
                                     </TableRow>
-                                ) : disciplines.length === 0 ? (
+                                ) : dataDisciplines?.total === 0 || !dataDisciplines?.items.length || isError ? (
                                     <TableRow>
                                         <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                                             {searchQuery ? "Nenhuma disciplina encontrada" : "Nenhuma disciplina cadastrada"}
                                         </TableCell>
                                     </TableRow>
                                 ) : (
-                                    disciplines.map((discipline) => (
+                                    dataDisciplines?.items?.map((discipline) => (
                                         <TableRow key={discipline._id}>
                                             <TableCell className="font-medium">{discipline.name}</TableCell>
                                             <TableCell className="max-w-xs truncate">{discipline.description || "-"}</TableCell>
@@ -285,7 +128,7 @@ export default function DisciplinasPage() {
                                                     </Hint>
 
                                                     <Hint label="Excluir" tone="destructive">
-                                                        <Button  className="cursor-pointer hover:text-white hover:bg-red-600" variant="outline" size="sm" onClick={() => deleteDiscipline(discipline._id)}>
+                                                        <Button className="cursor-pointer hover:text-white hover:bg-red-600" variant="outline" size="sm" onClick={() => openDeleteDialog(discipline)}>
                                                             <Trash2 className="h-4 w-4" />
                                                         </Button>
                                                     </Hint>
@@ -299,52 +142,21 @@ export default function DisciplinasPage() {
                     </div>
                 </CardContent>
             </Card>
+            {/* Create/Edit Dialog */}
+            <DisciplineDialog
+                isOpen={dialogState.isOpenCreateOrEditDialog}
+                onOpenChange={closeDialog}
+                onSubmit={handleSaveDiscipline}
+                initialData={dialogState.data}
+            />
 
-            {/* Edit Dialog */}
-            <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Editar Disciplina</DialogTitle>
-                        <DialogDescription>Altere os dados da disciplina</DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                        <div>
-                            <Label htmlFor="edit-name">Nome *</Label>
-                            <Input
-                                id="edit-name"
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                placeholder="Nome da disciplina"
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="edit-description">Descrição</Label>
-                            <Textarea
-                                id="edit-description"
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                placeholder="Descrição da disciplina (opcional)"
-                            />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Switch
-                                id="edit-active"
-                                checked={formData.active}
-                                onCheckedChange={(checked) => setFormData({ ...formData, active: checked })}
-                            />
-                            <Label htmlFor="edit-active">Disciplina ativa</Label>
-                        </div>
-                        <div className="flex gap-2 pt-4">
-                            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} className="flex-1">
-                                Cancelar
-                            </Button>
-                            <Button onClick={updateDiscipline} className="flex-1">
-                                Salvar Alterações
-                            </Button>
-                         </div>
-                    </div>
-                </DialogContent>
-            </Dialog>
+            {/* Delete Confirmation Dialog */}
+            <DisciplineAlertDialog
+                data={dialogState.data || null}
+                isOpen={dialogState.isOpenDeleteDialog}
+                onOpenChange={closeDialog}
+                onConfirm={handleDeleteDiscipline}
+            />
         </div>
     )
 }
